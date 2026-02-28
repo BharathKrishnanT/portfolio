@@ -108,11 +108,23 @@ export default function App() {
         <section id="about" className="py-24 md:py-32 fade-in-up">
           <div className="grid md:grid-cols-3 gap-12 items-start">
             <div className="md:col-span-1 flex flex-col items-center text-center">
-              <img 
-                src={resumeData.personal.headshot} 
-                alt={resumeData.personal.name} 
-                className="rounded-full h-40 w-40 object-cover mb-4 border-2 border-zinc-700 bg-zinc-800"
-              />
+              <div className="relative mb-4 h-40 w-40">
+                <img 
+                  src={resumeData.personal.headshot} 
+                  alt={resumeData.personal.name} 
+                  className="rounded-full h-40 w-40 object-cover border-2 border-zinc-700 bg-zinc-800"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      const fallback = document.createElement('div');
+                      fallback.className = 'absolute inset-0 flex items-center justify-center rounded-full bg-zinc-800 border-2 border-zinc-700 text-4xl font-bold text-zinc-500';
+                      fallback.innerText = resumeData.personal.name.split(' ').map(n => n[0]).join('');
+                      parent.appendChild(fallback);
+                    }
+                  }}
+                />
+              </div>
               <div className="flex flex-col space-y-2 w-48">
                 <a href={resumeData.personal.resume} download className="btn btn-secondary text-xs w-full justify-center">
                   <Download size={14} className="mr-2"/> Download Resume
